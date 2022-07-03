@@ -19,6 +19,9 @@ const store = createStore((state = initialState, action)=> {
   if(action.type === 'CREATE_THING'){
     return {...state, things: [...state.things, action.thing ]}; 
   }
+  if(action.type === 'DELETE_THING'){
+    return {...state, things: state.things.filter(_thing => _thing !== action.payload )}
+  }
   return state;
 });
 

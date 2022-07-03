@@ -26,6 +26,17 @@ app.get('/api/things', async(req, res, next)=> {
   }
 });
 
+app.delete('/api/things/:id', async(req, res, next) => {
+  try{
+    const thing = await Thing.findByPk(req.params.id);
+    thing.destroy();
+    res.sendStatus(204);
+  }
+  catch(ex){
+    next(ex)
+  }
+})
+
 app.get('/api/users', async(req, res, next)=> {
   try {
     res.send(await User.findAll());
