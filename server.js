@@ -17,6 +17,7 @@ app.post('/api/things', async(req, res, next)=> {
     next(ex);
   }
 });
+
 app.get('/api/things', async(req, res, next)=> {
   try {
     res.send(await Thing.findAll());
@@ -25,6 +26,17 @@ app.get('/api/things', async(req, res, next)=> {
     next(ex);
   }
 });
+
+app.put('/api/things/:id', async(req,res,next)=> {
+  try{
+    const thing = await Thing.findByPk(req.params.id);
+    thing.update(req.body);
+    res.send(thing);
+  }
+  catch(ex){
+    next(ex)
+  }
+})
 
 app.delete('/api/things/:id', async(req, res, next) => {
   try{

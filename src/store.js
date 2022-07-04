@@ -8,7 +8,8 @@ const initialState = {
 
 const store = createStore((state = initialState, action)=> { 
   if(action.type === 'SET_THINGS'){
-    return {...state, things: action.things };
+    const sortArr = action.things.sort((a,b) => {return b.rank - a.rank});
+    return {...state, things: sortArr };
   }
   if(action.type === 'SET_USERS'){
     return {...state, users: action.users }; 
@@ -27,6 +28,16 @@ const store = createStore((state = initialState, action)=> {
   }
   if(action.type === 'DELETE_USER'){
     return {...state, users: state.users.filter( _user => _user !== action.payload)};
+  }
+  if(action.type === 'ADD_RANK'){    
+    const thingArr = state.things.map( _thing => {
+      if(_thing.id === action.payload.data.id){
+        _thing.rank = action.payload.data.rank
+      }
+      return _thing;
+    });
+    const sortArr = thingArr.sort((a,b) => {return b.rank - a.rank});
+    return {...state, things: sortArr};
   }
   return state;
 });
