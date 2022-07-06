@@ -39,6 +39,17 @@ const store = createStore((state = initialState, action)=> {
     const sortArr = thingArr.sort((a,b) => {return b.rank - a.rank});
     return {...state, things: sortArr};
   }
+  if(action.type === 'CHANGE_USER'){
+    const thingArr = state.things.map( _thing => {
+      if(_thing.id === action.payload.newUser.data.id){
+        _thing.userId = action.payload.newUser.data.userId
+      }
+      return _thing;
+    });
+    const sortArr = thingArr.sort((a,b) => {return b.rank - a.rank});
+
+    return {...state, things: sortArr };
+  }
   return state;
 });
 

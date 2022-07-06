@@ -4,7 +4,15 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 
 
-const Things = ({ things, deleteAThing, addRank, unRank, users })=> {
+const Things = ({ things, deleteAThing, addRank, unRank, users, changeUser })=> {
+  const handleSelect = (event, thing) => {
+    const user = event.target.value;
+    const parameters = {
+      thing: thing,
+      user: user
+    }
+    changeUser(parameters);
+  }
   return (
     <div>
       <h1>Things</h1>
@@ -18,6 +26,19 @@ const Things = ({ things, deleteAThing, addRank, unRank, users })=> {
                 <button onClick = { () => deleteAThing(thing)}>x</button>
                 <button onClick = { () => addRank(thing)}>+</button>
                 <button onClick = { () => unRank(thing)}>-</button>
+                <select id='select user' onChange={() => handleSelect(event, thing)}> 
+                  <option value=''>Select user</option>
+                  {
+                    users.map( user => {
+                      return(
+                      <option key={user.id} value={user.id}>
+                        { user.name }
+                      </option>
+                      )
+                    })
+                  }
+                  <option value=''>no user</option>
+                </select>
               </li>
             );
           })
@@ -41,6 +62,10 @@ const mapDispatchToProps = (dispatch) => {
     unRank: async(thing) => {
       const newThing = await axios.put(`/api/things/${thing.id}`, {rank: thing.rank-1});
       dispatch({ type: 'ADD_RANK', payload: newThing});
+    },
+    changeUser: async(parameters) => { 
+      const newUser = await axios.put(`/api/things/${parameters.thing.id}`, { userId: parameters.user });
+      dispatch({ type: 'CHANGE_USER', payload: {newUser}});
     }
   }
 }
