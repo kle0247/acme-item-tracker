@@ -3,16 +3,18 @@ import ThingForm from './ThingForm';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
-const Things = ({ things, deleteAThing, addRank, unRank })=> {
+
+const Things = ({ things, deleteAThing, addRank, unRank, users })=> {
   return (
     <div>
       <h1>Things</h1>
       <ul>
         {
           things.map( thing => {
+            const foundUser = users.find(user => user.id === thing.userId);
             return (
               <li key={ thing.id }>
-                { thing.name } ({ thing.rank })
+                { thing.name } ({ thing.rank }) owned by { foundUser ? foundUser.name : 'no user'}
                 <button onClick = { () => deleteAThing(thing)}>x</button>
                 <button onClick = { () => addRank(thing)}>+</button>
                 <button onClick = { () => unRank(thing)}>-</button>
@@ -46,7 +48,8 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   (state)=> {
     return {
-      things: state.things
+      things: state.things,
+      users: state.users
     }
   }, mapDispatchToProps
 )(Things);

@@ -4,17 +4,28 @@ import { connect } from 'react-redux';
 import UserForm from './UserForm'
 
 
-const Users = ({ users, deleteAUser })=> {
+const Users = ({ users, deleteAUser, things })=> {
   return (
     <div>
       <h1>Users</h1>
       <ul>
         {
           users.map( user => {
+            const thingsOwned = things.filter(thing => thing.userId === user.id);
             return (
               <li key={ user.id }>
-                { user.name }
-                <button onClick={() => deleteAUser(user)}>x</button>
+                { user.name } owns: {thingsOwned.length ? thingsOwned.map(thing => {
+                  return(
+                    <div>
+                      <ul>
+                        <li key={ thing.id }>
+                        { thing.name }
+                        </li>
+                      </ul>
+                    </div>
+                  )
+                }) : 'nothing'}
+                <button onClick={() => deleteAUser(user)}>Delete user</button>
               </li>
             );
           })
@@ -27,7 +38,8 @@ const Users = ({ users, deleteAUser })=> {
 
 const mapStateToProps = (state)=> {
   return {
-    users: state.users
+    users: state.users,
+    things: state.things
   };
 }
 

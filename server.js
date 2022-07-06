@@ -5,6 +5,7 @@ const path = require('path');
 
 app.use(express.json());
 app.use('/dist', express.static('dist'));
+app.use('/public', express.static('assets'));
 
 app.get('/', (req, res)=> res.sendFile(path.join(__dirname, 'index.html')));
 
@@ -90,9 +91,13 @@ const init = async()=> {
     const [moe, larry, lucy, ethyl] = await Promise.all(
       ['moe', 'larry', 'lucy', 'ethyl'].map( name => User.create({ name }))
     );
-    const [foo, bar, bazz, quq, fizz] = await Promise.all(
-      ['foo', 'bar', 'bazz', 'quq', 'fizz'].map( name => Thing.create({ name }))
-    );
+
+    Thing.create({name: 'foo', userId: moe.id});
+    Thing.create({name: 'bar', userId: larry.id});
+    Thing.create({name: 'bazz', userId: lucy.id});
+    Thing.create({name: 'quq', userId: moe.id});
+    Thing.create({name: 'fizz'});
+    
   }
   catch(ex){
     console.log(ex);
